@@ -2,7 +2,10 @@
 import React, { useState } from "react";
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
-import {useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 
 
 export default function Classwork() {
@@ -13,6 +16,49 @@ export default function Classwork() {
     const [submitting, setSubmitting] = useState(false);
     const [responseError, setResponseError] = useState(null);
     const [responsePreview, setResponsePreview] = useState(null);
+    const [isFinalPreview, setIsFinalPreview] = useState(false);
+    const [editableQuestions, setEditableQuestions] = useState([]);
+
+    useEffect(() => {
+        if (responsePreview) {
+            const questions = responsePreview.split("\n\n").map((content, index) => ({
+                id: index,
+                content,
+                isEditing: false,
+                editedContent: content,
+            }));
+            setEditableQuestions(questions);
+        }
+    }, [responsePreview]);
+
+    const toggleFinalPreview = () => setIsFinalPreview(!isFinalPreview);
+
+    const toggleEdit = (index) => {
+        setEditableQuestions(current =>
+            current.map((q, i) => ({
+                ...q,
+                isEditing: i === index ? !q.isEditing : q.isEditing,
+            }))
+        );
+    };
+
+    const handleEditChange = (index, value) => {
+        setEditableQuestions(current =>
+            current.map((q, i) => (i === index ? { ...q, editedContent: value } : q))
+        );
+    };
+
+    const saveEdit = (index) => {
+        setEditableQuestions(current =>
+            current.map((q, i) => {
+                if (i === index) {
+                    return { ...q, content: q.editedContent, isEditing: false };
+                }
+                return q;
+            })
+        );
+    };
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -55,7 +101,7 @@ export default function Classwork() {
     };
     const MathPreview = ({ content }) => {
         const [html, setHtml] = useState("");
-    
+
         useEffect(() => {
             try {
                 const parts = content.split(/\$(.*?)\$/); // Split by $ signs and capture the equation parts
@@ -80,16 +126,45 @@ export default function Classwork() {
                 setHtml(`<span class="text-red-500">Error processing equations</span>`);
             }
         }, [content]);
-    
+
         return <div dangerouslySetInnerHTML={{ __html: html }} />;
     };
-    
+
+    const generatePDF = () => {
+        // Specify the element you want to capture. You can use a ref or document.getElementById
+        const input = document.getElementById('divToPrint');
+
+        html2canvas(input)
+            .then((canvas) => {
+
+                // The following parameters: 'p', 'mm', 'a4' set the PDF to portrait, use millimeters, and format to A4 size
+                const pdf = new jsPDF({
+                    orientation: 'p',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                // Add the image to the PDF. The parameters 0, 0 specify the x,y coordinates on the PDF to place the image
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                // Download the PDF
+                pdf.save('download.pdf');
+            });
+    }
+
+
+    // Dummy function for uploading questions
+    const uploadQuestions = () => {
+        console.log("Uploading questions...");
+        // Implement your actual upload logic here, possibly using fetch to POST to your backend
+    };
 
     return (
         <div className="bg-white text-black flex justify-center items-center h-screen">
             <div className="p-4 w-80">
                 <h1 className="text-2xl font-bold mb-4">Question Set Creation</h1>
-
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4 ">
                         <label className="block text-sm font-bold mb-2" htmlFor="totalQuestions">Total Questions:</label>
@@ -149,24 +224,56 @@ export default function Classwork() {
                         <button type="submit" disabled={submitting} className={`${submitting ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded`}>{submitting ? "Submitting..." : "Submit"}</button>
                     </div>
                 </form>
-                <div className="mt-4">
-                {/* <Link href="/">Go back to homepage</Link> */}
-            </div>
                 {responseError && <p className="text-red-500">{responseError}</p>}
 
             </div>
 
-            {responsePreview && (
-                <div className="h-screen overflow-y-auto p-4">
-                    <h2 className="text-xl font-bold mb-4">Preview</h2>
-                    <ul className="list-disc pl-4">
-                        {responsePreview.split("\n\n").map((question, index) => (
-                            // <p>{question}</p>
-                            <MathPreview key={index} content={question} />
-                        ))}
-                    </ul>
-                </div>
-            )}
+            <div className="h-full overflow-y-scroll p-4 w-3/4 ">
+                <h2 className="text-xl font-bold mb-4">{isFinalPreview ? 'Final Preview' : 'Preview'}</h2>
+                <ul className="list-disc pl-4" style={{ listStyleType: "none" }}>
+                    {editableQuestions.map((question, index) => (
+                        <li key={index} className="mb-4">
+                            <div className="bg-white border border-gray-200 rounded-lg shadow-md p-4"> {/* Added classes for the card and border */}
+                                {isFinalPreview || !question.isEditing ? (
+                                    <MathPreview content={question.content} />
+                                ) : (
+                                    <>
+                                        <textarea value={question.editedContent} onChange={(e) => handleEditChange(index, e.target.value)}
+                                            className="border border-gray-300 rounded px-3 py-2 mb-2 bg-white w-full" /> {/* Adjusted classes for full width */}
+                                        <button onClick={() => saveEdit(index)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded">Save</button>
+                                    </>
+                                )}
+                                {!isFinalPreview && (
+                                    <div className="mt-2"> {/* Added div for buttons alignment */}
+                                        <button onClick={() => toggleEdit(index)} className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-4 rounded mr-2">
+                                            {question.isEditing ? 'Cancel' : 'Edit'}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+
+                {!isFinalPreview && (
+                    <button onClick={toggleFinalPreview} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4">
+                        Show Final Preview
+                    </button>
+                )}
+                {isFinalPreview && (
+                    <div className="flex flex-row items-center justify-center space-x-4"> {/* Added justify-center for center alignment and space-x-4 for spacing */}
+                        <button onClick={generatePDF} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 mr-4">
+                            Create PDF
+                        </button>
+                        <button onClick={uploadQuestions} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mr-4">
+                            Upload Questions
+                        </button>
+                        <button onClick={toggleFinalPreview} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
+                            Back to Edit
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

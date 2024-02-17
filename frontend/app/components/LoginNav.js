@@ -1,5 +1,5 @@
 import Link from 'next/link';
-
+import { FaChalkboardTeacher } from 'react-icons/fa';
 const LoginNav = () => {
     return (
         <div>
@@ -23,6 +23,7 @@ const LoginNav = () => {
                         </ul>
                     </div>
                     <Link href="/" className="btn btn-ghost text-xl">
+                        <FaChalkboardTeacher className='mt-1'></FaChalkboardTeacher>
                         Tutor
                     </Link>
                 </div>
@@ -31,12 +32,12 @@ const LoginNav = () => {
                     <ul className="menu menu-horizontal px-1">
                         <li>
                             <Link href="/classroom">
-                                Classroom
+                                Materials
                             </Link>
                         </li>
                         <li>
                             <Link href="/classwork">
-                                Classwork
+                            Problem Set
                             </Link>
                         </li>
                     </ul>
