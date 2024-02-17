@@ -1,5 +1,6 @@
 import React from "react";
 import Link from 'next/link';
+import { CiCirclePlus } from "react-icons/ci";
 
 export default function Classwork() {
     return (
@@ -7,14 +8,17 @@ export default function Classwork() {
             <div className="flex justify-end p-4">
                 <div>
                     <Link href="/classwork/createnew">
+                        
                         <div className="btn btn-outline text-black">
+                        <CiCirclePlus style={{ fontSize: '2em' }} />
                             Create New Question
                         </div>
                     </Link>
                 </div>
                 <div className="ml-2">
-                    <Link href="/classwork/upload">
+                    <Link href="/classwork/uploadQuestion">
                         <div className="btn btn-outline text-black">
+                        <CiCirclePlus style={{ fontSize: '2em' }} />
                             Upload Question
                         </div>
                     </Link>
