@@ -19,9 +19,14 @@ export default function Classwork() {
     const [responsePreview, setResponsePreview] = useState(null);
     const [isFinalPreview, setIsFinalPreview] = useState(false);
     const [editableQuestions, setEditableQuestions] = useState([]);
+
+    const [file, setFile] = useState(null);
+    const [description, setDescription] = useState("");
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
+
     };
+
     useEffect(() => {
         if (responsePreview) {
             const questions = responsePreview.split("\n\n").map((content, index) => ({
@@ -72,34 +77,85 @@ export default function Classwork() {
             difficultyLevel
         };
 
-        try {
-            setSubmitting(true);
-            const response = await fetch("http://10.100.161.41:8000/create-question", {
-                method: "POST",
-                headers:  {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            });
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const text = e.target.result;
+                // Log the text content of the file
+                // console.log("File content:", text);
+                console.log(typeof(text));
+                const func = async () => {
+                    try {
+                        setSubmitting(true);
+                        const response = await fetch("http://10.100.161.41:8000/create-questions-using-pdf", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                totalQuestions: formData.totalQuestions,
+                                subjectName: formData.subjectName,
+                                selectedTopics: formData.selectedTopics,
+                                difficultyLevel: formData.difficultyLevel,
+                                text: text
+                            })
+                        });
 
-            if (response.ok) {
-                const responseData = await response.json();
-                console.log("Form submitted successfully!");
-                console.log("Response Data:", responseData);
-                setResponsePreview(responseData.results); // Set the response data for preview
-                setResponseError(null); // Reset any previous error
-            } else {
-                const errorMessage = await response.text();
-                console.error("Failed to submit form data:", errorMessage);
-                setResponseError(errorMessage);
+                        if (response.ok) {
+                            const responseData = await response.json();
+                            console.log("Form submitted successfully!");
+                            console.log("Response Data:", responseData);
+                            setResponsePreview(responseData.results); // Set the response data for preview
+                            setResponseError(null); // Reset any previous error
+                        } else {
+                            const errorMessage = await response.text();
+                            console.error("Failed to submit form data:", errorMessage);
+                            setResponseError(errorMessage);
+                            setResponsePreview(null); // Clear any previous preview data
+                        }
+                    } catch (error) {
+                        console.error("Error submitting form data:", error);
+                        setResponseError("An error occurred while processing your request.");
+                        setResponsePreview(null);
+                    } finally {
+                        setSubmitting(false);
+                    }
+                }
+                func();
+            };
+            reader.readAsText(file); // Read the file as text
+        }
+        else {
+            try {
+                setSubmitting(true);
+                const response = await fetch("http://10.100.161.41:8000/create-question", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    console.log("Form submitted successfully!");
+                    console.log("Response Data:", responseData);
+                    setResponsePreview(responseData.results); // Set the response data for preview
+                    setResponseError(null); // Reset any previous error
+                } else {
+                    const errorMessage = await response.text();
+                    console.error("Failed to submit form data:", errorMessage);
+                    setResponseError(errorMessage);
+                    setResponsePreview(null); // Clear any previous preview data
+                }
+            } catch (error) {
+                console.error("Error submitting form data:", error);
+                setResponseError("An error occurred while processing your request.");
                 setResponsePreview(null); // Clear any previous preview data
+            } finally {
+                setSubmitting(false);
             }
-        } catch (error) {
-            console.error("Error submitting form data:", error);
-            setResponseError("An error occurred while processing your request.");
-            setResponsePreview(null); // Clear any previous preview data
-        } finally {
-            setSubmitting(false);
+
         }
     };
     const MathPreview = ({ content }) => {
@@ -164,12 +220,12 @@ export default function Classwork() {
         // console.log(editableQuestions);
         const upload = async () => {
             let array = []
-            for(let i = 0; i < editableQuestions.length; i++){
+            for (let i = 0; i < editableQuestions.length; i++) {
                 array.push(editableQuestions[i].editedContent);
             }
             const resp = await fetch("http://10.100.161.41:8000/create-new-post", {
                 method: "POST",
-                headers:  {
+                headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
@@ -181,7 +237,7 @@ export default function Classwork() {
                     problems: array
                 })
             });
-            if(!resp.ok){
+            if (!resp.ok) {
                 console.log("Kisui oise na")
             }
         }
@@ -248,11 +304,11 @@ export default function Classwork() {
                         </select>
                     </div>
                     <div className="ml-2">
-                    <div className="mb-4">
-                        <label htmlFor="file" className="block text-sm font-bold mb-2">Upload File (PDF or Image):</label>
-                        <input type="file" id="file" accept=".pdf,image/*" onChange={handleFileChange} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
+                        <div className="mb-4">
+                            <label htmlFor="file" className="block text-sm font-bold mb-2">Upload File (PDF or Image):</label>
+                            <input type="file" id="file" accept=".txt" onChange={handleFileChange} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
+                        </div>
                     </div>
-                </div>
                     <div className="flex justify-center ">
                         <button type="submit" disabled={submitting} className={`${submitting ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded`}>{submitting ? "Submitting..." : "Submit"}</button>
                     </div>
