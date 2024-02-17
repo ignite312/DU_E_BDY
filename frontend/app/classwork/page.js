@@ -154,45 +154,43 @@ export default function Classwork() {
     };
 
     return (
-        <div className="bg-white text-black flex flex-col h-screen">
+        <div className="bg-white text-black flex flex-col min-h-screen">
             <div className="flex justify-end p-4">
                 <div>
                     <Link href="/classwork/createnew">
-
                         <div className="btn btn-outline text-black">
-                            <CiCirclePlus style={{ fontSize: '2em' }} />
-                            Create New Question
+                        <CiCirclePlus style={{ fontSize: '2em' }} />
+                        Create New Question
                         </div>
                     </Link>
                 </div>
+                
             </div>
-
-            <div className="flex justify-center flex-1">
-                <div className="w-1/2">
-                    <ul className="questions-list space-y-4">
-
-                    {posts.map((post) => (
-                            <li key={post.id} className="bg-gray-100 p-4 rounded-md shadow-md">
-                                <h1 className="text-lg font-bold text-gray-800 mb-2">Author: {post.creator}</h1>
-                                {parseProblems(post.problems).map((problem, index) => (
-                                    <MathPreview key={index} content={problem} />
+    
+            <div className="flex justify-center flex-1 px-4">
+                <div className="w-full max-w-4xl">
+                    <ul className="space-y-8">
+                        {posts.map((post, index) => (
+                            <li key={post.id} className="bg-gray-100 p-6 rounded-lg shadow">
+                                <h1 className="text-lg font-bold text-gray-800 mb-4">Author: {post.creator}</h1>
+                                {parseProblems(post.problems).map((problem, idx) => (
+                                    <div key={idx} className="mb-2 p-4 border-2 border-gray-200 rounded-lg bg-white shadow-sm">
+                                        <MathPreview content={problem} />
+                                    </div>
                                 ))}
-                                <h1 className="text-sm text-gray-600 mt-2">Date Created: {new Date(post.posttime).toLocaleString()}</h1>
+                                <h1 className="text-sm text-gray-600 mt-4">Date Created: {new Date(post.posttime).toLocaleString()}</h1>
                                 <form onSubmit={handleSubmit}>
-                                        <div className="mb-4">
-                                            <label htmlFor="file" className="block text-sm font-bold m-2">Upload File (TXT):</label>
-                                            <input type="file" id="file" accept=".txt" onChange={(event) => handleFileChange(event, post.problems)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
-                                        </div>
-                                        <button type="submit" className="btn btn-neutral text-white font-bold py-2 px-4 rounded">Check Script</button>
-                                    </form>
+                                    <div className="mt-4">
+                                        <label htmlFor={`file-${index}`} className="block text-sm font-bold mb-1">Upload File (TXT):</label>
+                                        <input type="file" id={`file-${index}`} accept=".txt" onChange={(event) => handleFileChange(event, post.problems)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
+                                    </div>
+                                    <button type="submit" className="mt-4 btn btn-neutral text-white font-bold py-2 px-4 rounded">Check Script</button>
+                                </form>
                             </li>
                         ))}
                     </ul>
                 </div>
             </div>
-
-
-
         </div>
     );
-}
+                                }    

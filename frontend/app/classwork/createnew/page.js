@@ -19,7 +19,7 @@ export default function Classwork() {
     const [responsePreview, setResponsePreview] = useState(null);
     const [isFinalPreview, setIsFinalPreview] = useState(false);
     const [editableQuestions, setEditableQuestions] = useState([]);
-
+    const [isUploading, setIsUploading] = useState(false);
     const [file, setFile] = useState(null);
     const [description, setDescription] = useState("");
     const handleFileChange = (event) => {
@@ -83,7 +83,7 @@ export default function Classwork() {
                 const text = e.target.result;
                 // Log the text content of the file
                 // console.log("File content:", text);
-                console.log(typeof(text));
+                console.log(typeof (text));
                 const func = async () => {
                     try {
                         setSubmitting(true);
@@ -217,32 +217,46 @@ export default function Classwork() {
     // Dummy function for uploading questions
     const uploadQuestions = () => {
         console.log("Uploading questions...");
-        // console.log(editableQuestions);
-        const upload = async () => {
-            let array = []
-            for (let i = 0; i < editableQuestions.length; i++) {
-                array.push(editableQuestions[i].editedContent);
+        setIsUploading(true); // Indicate the start of the uploading process
+    
+        let questionsArray = editableQuestions.map(q => q.editedContent);
+    
+        const postData = {
+            username: "Emon",
+            subjectName,
+            selectedTopics,
+            difficultyLevel,
+            description: "", // Adjust according to your needs
+            problems: questionsArray
+        };
+    
+        fetch("http://10.100.161.41:8000/create-new-post", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-            const resp = await fetch("http://10.100.161.41:8000/create-new-post", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: "emon",
-                    subjectName: subjectName,
-                    selectedTopics: selectedTopics,
-                    difficultyLevel: difficultyLevel,
-                    description: "",
-                    problems: array
-                })
-            });
-            if (!resp.ok) {
-                console.log("Kisui oise na")
-            }
-        }
-        upload();
+            return response.json(); // Process the response data
+        })
+        .then(data => {
+            console.log("Successfully created post:", data);
+            // Handle successful post creation here
+        })
+        .catch(error => {
+            console.error("Failed to create post:", error);
+            // Handle errors here
+        })
+        .finally(() => {
+            setIsUploading(false); // Indicate that uploading has finished regardless of the outcome
+        });
     };
+    
+    
 
     return (
         <div className="bg-white text-black flex justify-center items-center h-screen">
@@ -305,7 +319,7 @@ export default function Classwork() {
                     </div>
                     <div className="ml-2">
                         <div className="mb-4">
-                            <label htmlFor="file" className="block text-sm font-bold mb-2">Upload File (PDF or Image):</label>
+                            <label htmlFor="file" className="block text-sm font-bold mb-2">Upload File (Txt or Image):</label>
                             <input type="file" id="file" accept=".txt" onChange={handleFileChange} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
                         </div>
                     </div>
@@ -354,8 +368,12 @@ export default function Classwork() {
                         <button onClick={generatePDF} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 mr-4">
                             Create PDF
                         </button>
-                        <button onClick={uploadQuestions} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mr-4">
-                            Upload Questions
+                        <button
+                            onClick={uploadQuestions}
+                            disabled={isUploading}
+                            className={`${isUploading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded mt-4 mr-4`}
+                        >
+                            {isUploading ? "Creating Post..." : "Create Post"}
                         </button>
                         <button onClick={toggleFinalPreview} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
                             Back to Edit
