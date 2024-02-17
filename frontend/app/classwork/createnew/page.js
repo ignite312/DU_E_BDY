@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';  
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import Link from 'next/link';

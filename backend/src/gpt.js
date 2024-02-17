@@ -59,7 +59,8 @@ class gpt{
                 Here's an answer script: ${answerscript}
 
                 Assess the students' answer assuming each question is worth 10.
-                Strictly: Just give a JSON string of the format
+                An unrelated answer amounts to 0 in that question
+                Strictly: GIVE a JSON string of the format
                 {
                     Assessments: [
                         'your description on how the student did in the first problem',
@@ -69,8 +70,8 @@ class gpt{
                         .
                     ],
                     Marks: [
-                        Q1: marks on q1 out of 10,
-                        Q2: marks on q2 out of 10,
+                        'Q1: marks on q1 out of 10',
+                        'Q2: marks on q2 out of 10',
                         .
                         .
                         .
@@ -78,6 +79,7 @@ class gpt{
                     TotalMarks: total of of the marks in each question
                 }
                 Strictly: Do not say any extra words
+                DO NOT STRAY FROM THE JSON FORMAT
                 `
             }],
             model: "gpt-4-0125-preview",

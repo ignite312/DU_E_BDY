@@ -40,6 +40,7 @@ const MathPreview = ({ content }) => {
 
 export default function Classwork() {
     const [posts, setposts] = useState([]);
+    const [totalmarks, settotalmarks] = useState({});
 
     const [file, setFile] = useState(null);
     const [description, setDescription] = useState("");
@@ -59,7 +60,7 @@ export default function Classwork() {
                     })
                 });
                 const responseData = await resp.json();
-                setPosts(responseData);
+                setposts(responseData);
             } catch (err) {
                 console.error('Error getting posts: ', err);
             }
@@ -103,8 +104,18 @@ export default function Classwork() {
                         });
                         const responseData = await resp.json();
                         console.log(responseData);
+                        let tmarks = totalmarks;
+                        const arr = JSON.parse(myStr);
+                        let ttal = arr.length * 10;
+                        tmarks = {
+                            obtained: responseData.results.TotalMarks,
+                            total: ttal
+                        };
+                        settotalmarks(tmarks);
                         setassessment(responseData);
-                        console.log(responseData);
+                        console.log(totalmarks);
+
+                        alert(tmarks.obtained + ' / ' + tmarks.total);
                     } catch (err) {
                         console.error('Error getting posts: ', err);
                     }
@@ -159,14 +170,14 @@ export default function Classwork() {
                 <div>
                     <Link href="/classwork/createnew">
                         <div className="btn btn-outline text-black">
-                        <CiCirclePlus style={{ fontSize: '2em' }} />
-                        Create New Question
+                            <CiCirclePlus style={{ fontSize: '2em' }} />
+                            Create New Question
                         </div>
                     </Link>
                 </div>
-                
+
             </div>
-    
+
             <div className="flex justify-center flex-1 px-4">
                 <div className="w-full max-w-4xl">
                     <ul className="space-y-8">
@@ -193,4 +204,4 @@ export default function Classwork() {
             </div>
         </div>
     );
-                                }    
+}    
