@@ -5,7 +5,8 @@ import 'katex/dist/katex.min.css';
 import { useEffect, useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-
+import Link from 'next/link';
+import { CiCirclePlus } from "react-icons/ci";
 
 
 export default function Classwork() {
@@ -18,7 +19,9 @@ export default function Classwork() {
     const [responsePreview, setResponsePreview] = useState(null);
     const [isFinalPreview, setIsFinalPreview] = useState(false);
     const [editableQuestions, setEditableQuestions] = useState([]);
-
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
     useEffect(() => {
         if (responsePreview) {
             const questions = responsePreview.split("\n\n").map((content, index) => ({
@@ -244,6 +247,12 @@ export default function Classwork() {
                             <option value="3">3</option>
                         </select>
                     </div>
+                    <div className="ml-2">
+                    <div className="mb-4">
+                        <label htmlFor="file" className="block text-sm font-bold mb-2">Upload File (PDF or Image):</label>
+                        <input type="file" id="file" accept=".pdf,image/*" onChange={handleFileChange} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
+                    </div>
+                </div>
                     <div className="flex justify-center ">
                         <button type="submit" disabled={submitting} className={`${submitting ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded`}>{submitting ? "Submitting..." : "Submit"}</button>
                     </div>
