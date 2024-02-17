@@ -1,7 +1,4 @@
-// components/Navbar.js
-
 import Link from 'next/link';
-
 
 const LoginNav = () => {
     return (
@@ -17,27 +14,25 @@ const LoginNav = () => {
                                 <Link href="/app/classroom">
                                     Classroom
                                 </Link>
-
                             </li>
                             <li>
-                                <Link href="/app/classroom">
+                                <Link href="/app/classwork">
                                     Classwork
                                 </Link>
                             </li>
                         </ul>
                     </div>
                     <Link href="/" className="btn btn-ghost text-xl">
-
                         Tutor
                     </Link>
                 </div>
-                <div className="navbar-center hidden lg:flex">
+                {/* Move the navbar-center content to navbar-end for alignment to the right */}
+                <div className="navbar-end">
                     <ul className="menu menu-horizontal px-1">
                         <li>
                             <Link href="/classroom">
                                 Classroom
                             </Link>
-
                         </li>
                         <li>
                             <Link href="/classwork">
@@ -46,9 +41,7 @@ const LoginNav = () => {
                         </li>
                     </ul>
                 </div>
-
             </div>
-
         </div>
     );
 };

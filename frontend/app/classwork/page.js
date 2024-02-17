@@ -1,14 +1,18 @@
 'use client'
 import React, { useState } from "react";
-import Link from "next/link";
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
+import {useEffect, useRef } from 'react';
+
 
 export default function Classwork() {
-    // State variables to manage the form inputs
     const [totalQuestions, setTotalQuestions] = useState("");
     const [subjectName, setSubjectName] = useState("");
     const [selectedTopics, setSelectedTopics] = useState([]);
     const [difficultyLevel, setDifficultyLevel] = useState("");
-    const [submitting, setSubmitting] = useState(false); // State variable to track form submission status
+    const [submitting, setSubmitting] = useState(false);
+    const [responseError, setResponseError] = useState(null);
+    const [responsePreview, setResponsePreview] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -18,68 +22,83 @@ export default function Classwork() {
             selectedTopics,
             difficultyLevel
         };
-        console.log("Submitting Form Data:", JSON.stringify(formData));
 
-    
         try {
-            setSubmitting(true); // Set submitting state to true
-            const response = await fetch("http://10.100.161.41:8000/create-question-gemini", {
+            setSubmitting(true);
+            const response = await fetch("http://10.100.161.41:8000/create-question", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(formData)
             });
-    
+
             if (response.ok) {
-                // Reset form inputs if submission is successful
-                setTotalQuestions("");
-                setSubjectName("");
-                setSelectedTopics([]);
-                setDifficultyLevel("");
-    
-                // Parse the JSON response and log it
                 const responseData = await response.json();
                 console.log("Form submitted successfully!");
-                console.log("Response Data:", responseData); // Log the response data here
+                console.log("Response Data:", responseData);
+                setResponsePreview(responseData.results); // Set the response data for preview
+                setResponseError(null); // Reset any previous error
             } else {
-                console.error("Failed to submit form data:", response.statusText);
+                const errorMessage = await response.text();
+                console.error("Failed to submit form data:", errorMessage);
+                setResponseError(errorMessage);
+                setResponsePreview(null); // Clear any previous preview data
             }
         } catch (error) {
             console.error("Error submitting form data:", error);
+            setResponseError("An error occurred while processing your request.");
+            setResponsePreview(null); // Clear any previous preview data
         } finally {
             setSubmitting(false);
         }
     };
+    // const MathPreview = ({ content }) => {
+    //     const [html, setHtml] = useState("");
     
+    //     useEffect(() => {
+    //         try {
+    //             const equations = content.split('$').filter(eq => eq.trim().length > 0);
+    //             const htmlString = equations.map(eq => {
+    //                 try {
+    //                     return katex.renderToString(eq, { throwOnError: false });
+    //                 } catch (error) {
+    //                     console.error("KaTeX rendering error:", error);
+    //                     return `<span class="text-red-500">Error rendering equation: ${eq}</span>`;
+    //                 }
+    //             }).join('<br>'); // Separate equations by line breaks
+    //             setHtml(htmlString);
+    //         } catch (error) {
+    //             console.error("Error processing equations:", error);
+    //             setHtml(`<span class="text-red-500">Error processing equations</span>`);
+    //         }
+    //     }, [content]);
     
+    //     return <div dangerouslySetInnerHTML={{ __html: html }} />;
+    // };
 
     return (
-        <div className="flex justify-center items-center h-full">
+        <div className="bg-white text-black flex justify-center items-center h-screen">
             <div className="p-4 w-80">
-                <h1 className="text-2xl font-bold mb-4">Welcome to the Classwork</h1>
+                <h1 className="text-2xl font-bold mb-4">Question Set Creation</h1>
 
-                {/* Form with inputs */}
                 <form onSubmit={handleSubmit}>
-                    {/* Input for total questions */}
-                    <div className="mb-4">
+                    <div className="mb-4 ">
                         <label className="block text-sm font-bold mb-2" htmlFor="totalQuestions">Total Questions:</label>
-                        <input type="number" id="totalQuestions" value={totalQuestions} onChange={(event) => setTotalQuestions(event.target.value)} className="w-full border border-gray-300 rounded px-3 py-2" />
+                        <input type="number" id="totalQuestions" value={totalQuestions} onChange={(event) => setTotalQuestions(event.target.value)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
                     </div>
-                    {/* Selection for subject name */}
                     <div className="mb-4">
                         <label className="block text-sm font-bold mb-2" htmlFor="subjectName">Subject Name:</label>
-                        <select id="subjectName" value={subjectName} onChange={(event) => setSubjectName(event.target.value)} className="w-full border border-gray-300 rounded px-3 py-2">
+                        <select id="subjectName" value={subjectName} onChange={(event) => setSubjectName(event.target.value)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white">
                             <option value="">Select subject</option>
                             <option value="math">Math</option>
                             <option value="science">Science</option>
                             <option value="history">History</option>
                         </select>
                     </div>
-                    {/* Selection for topics */}
                     <div className="mb-4">
                         <label className="block text-sm font-bold mb-2">Topics:</label>
-                        <select multiple value={selectedTopics} onChange={(event) => setSelectedTopics(Array.from(event.target.selectedOptions, (option) => option.value))} className="w-full border border-gray-300 rounded px-3 py-2">
+                        <select multiple value={selectedTopics} onChange={(event) => setSelectedTopics(Array.from(event.target.selectedOptions, (option) => option.value))} className="w-full border border-gray-300 rounded px-3 py-2 bg-white">
                             {subjectName === "math" && (
                                 <>
                                     <option value="algebra">Algebra</option>
@@ -109,27 +128,37 @@ export default function Classwork() {
                             )}
                         </select>
                     </div>
-                    {/* Selection for difficulty level */}
                     <div className="mb-4">
                         <label className="block text-sm font-bold mb-2" htmlFor="difficultyLevel">Difficulty Level:</label>
-                        <select id="difficultyLevel" value={difficultyLevel} onChange={(event) => setDifficultyLevel(event.target.value)} className="w-full border border-gray-300 rounded px-3 py-2">
+                        <select id="difficultyLevel" value={difficultyLevel} onChange={(event) => setDifficultyLevel(event.target.value)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white">
                             <option value="">Select difficulty level</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                         </select>
                     </div>
-                    {/* Submit button */}
-                    <div className="flex justify-end">
+                    <div className="flex justify-center ">
                         <button type="submit" disabled={submitting} className={`${submitting ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded`}>{submitting ? "Submitting..." : "Submit"}</button>
                     </div>
                 </form>
-
-                {/* Optional: Add a link using Next.js Link */}
                 <div className="mt-4">
-                    <Link href="/">Go back to homepage</Link>
-                </div>
+                {/* <Link href="/">Go back to homepage</Link> */}
             </div>
+                {responseError && <p className="text-red-500">{responseError}</p>}
+
+            </div>
+
+            {responsePreview && (
+                <div className="h-screen overflow-y-auto p-4">
+                    <h2 className="text-xl font-bold mb-4">Preview</h2>
+                    <ul className="list-disc pl-4">
+                        {responsePreview.split("\n\n").map((question, index) => (
+                            <p>{question}</p>
+                            // <MathPreview key={index} content={question} />
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 }
