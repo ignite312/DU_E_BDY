@@ -16,7 +16,9 @@ class gpt{
                 put their difficulty to ${difficulty} out of 3
                 Write them in the format:
                 Question {number_of_question}: A ball is thrown at a velocity of 12m/s at an angle of 32 degrees with the horizontal. What are the ball's horizontal and vertical velocities?
-                Strictly: Do not say anything extra`
+                Strictly: Do not say anything extra
+                Strictly: wrap the equations in dollar signs 
+                `
             }],
             model: "gpt-4-0125-preview",
         });
