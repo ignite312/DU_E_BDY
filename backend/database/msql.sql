@@ -73,13 +73,13 @@ END//
 DELIMITER ;
 
 
-CREATE TABLE IF NOT EXISTS mcq(
-    id VARCHAR(255) PRIMARY KEY,
-    creator VARCHAR(255),
-    description VARCHAR(255),
-    solution VARCHAR(255),
-    subject VARCHAR(255),
-    tags VARCHAR(255),
-    difficulty INT,
-    FOREIGN KEY (creator) REFERENCES users(username)
-);
+-- CREATE TABLE IF NOT EXISTS mcq(
+--     id VARCHAR(255) PRIMARY KEY,
+--     creator VARCHAR(255),
+--     description VARCHAR(255),
+--     solution VARCHAR(255),
+--     subject VARCHAR(255),
+--     tags VARCHAR(255),
+--     difficulty INT,
+--     FOREIGN KEY (creator) REFERENCES users(username)
+-- );

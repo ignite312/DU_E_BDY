@@ -158,7 +158,31 @@ export default function Classwork() {
     // Dummy function for uploading questions
     const uploadQuestions = () => {
         console.log("Uploading questions...");
-        // Implement your actual upload logic here, possibly using fetch to POST to your backend
+        // console.log(editableQuestions);
+        const upload = async () => {
+            let array = []
+            for(let i = 0; i < editableQuestions.length; i++){
+                array.push(editableQuestions[i].editedContent);
+            }
+            const resp = await fetch("http://10.100.161.41:8000/create-new-post", {
+                method: "POST",
+                headers:  {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: "emon",
+                    subjectName: subjectName,
+                    selectedTopics: selectedTopics,
+                    difficultyLevel: difficultyLevel,
+                    description: "",
+                    problems: array
+                })
+            });
+            if(!resp.ok){
+                console.log("Kisui oise na")
+            }
+        }
+        upload();
     };
 
     return (

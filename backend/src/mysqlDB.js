@@ -25,6 +25,7 @@ class mysqlDB {
     async addDescQuestion(creator, description, solution, subject, tags, difficulty){
         try{
             const [rows, fields] = await this.connection.execute(this.ADDQUESTIONQUERY, [creator, description, solution, subject, tags, difficulty]);
+            console.log([creator, description, solution, subject, tags, difficulty]);
             console.log('Successfully added question');
         } catch(err){
             console.error('Error adding desc_question: ', err);

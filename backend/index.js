@@ -39,9 +39,9 @@ app.post('/create-new-post', async (req, res) => {
         const difficultyLevel = req.body.difficultyLevel;
         const description = req.body.description;
         const problems = req.body.problems;
-        const resultsarray = problems.split('\n\n');
-        for(let i = 0; i < resultsarray.length; i++){
-            await newDB.addDescQuestion(user, resultsarray[i], "", subjectName, selectedTopics.join(' '), difficultyLevel);
+        for(let i = 0; i < problems.length; i++){
+            console.log(problems[i]);
+            await newDB.addDescQuestion(user, problems[i], "", subjectName, selectedTopics.join(' '), difficultyLevel);
         }
         await newDB.addNewPost(user, description, problems);
         return res.status(200);
@@ -62,6 +62,8 @@ app.post('/get-posts', async(req, res)=>{
         return res.status(400);
     }
 });
+
+// app.post('/pdf-upload')
 
 // app.post('/create-question-gemini', async (req, res) => {
 //     try{
