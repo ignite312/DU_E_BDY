@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-// import Navbar from "@/app/components/Navbar"
 import LoginNav from "@/app/components/LoginNav"
 
 export default function Home() {
