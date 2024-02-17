@@ -29,7 +29,7 @@ export default function UploadMaterial() {
     return (
         <div className="flex justify-center items-center h-screen">
             <div className="bg-white text-black p-4">
-                <h2 className="text-lg font-bold mb-4">Upload Question</h2>
+                <h2 className="text-lg font-bold mb-4">Upload Answer of the question</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label htmlFor="file" className="block text-sm font-bold mb-2">Upload File (TXT):</label>
