@@ -27,7 +27,7 @@ export default function Classwork() {
             setSubmitting(true);
             const response = await fetch("http://10.100.161.41:8000/create-question", {
                 method: "POST",
-                headers: {
+                headers:  {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(formData)

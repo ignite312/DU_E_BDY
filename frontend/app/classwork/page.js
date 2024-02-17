@@ -1,8 +1,49 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Link from 'next/link';
 import { CiCirclePlus } from "react-icons/ci";
 
 export default function Classwork() {
+    const [posts, setposts] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async() => {
+            try{
+                const resp = await fetch("http://10.100.161.41:8000/get-posts", {
+                    method: "POST",
+                    headers:  {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: "emon"
+                    })
+                });
+                const responseData = await resp.json();
+                console.log(responseData);
+                setposts(responseData);
+            } catch(err){
+                console.error('Error getting posts: ', err);
+            }
+        }
+        fetchData();
+    }, []);
+    // const posts = [
+    //     {
+    //         id: 1,
+    //         responseData: {
+    //             description: "kutta",
+    //             problems: "nai"
+    //         }
+    //     },
+    //     {
+    //         id: 2,
+    //         responseData: {
+    //             description: "bilai",
+    //             problems: "ase"
+    //         }
+    //     }
+    // ];
+    
     return (
         <div className="bg-white text-black flex flex-col h-screen">
             <div className="flex justify-end p-4">
@@ -27,33 +68,20 @@ export default function Classwork() {
 
             <div className="flex justify-center  flex-1">
                 <div className="w-1/2">
-                    <ul className="questions-list space-y-4">
-                        <li>
-                            <div className="bg-gray-100 p-4 rounded-md shadow-md">
-                                <p className="text-sm text-gray-600">ID: 1</p>
-                                <p className="font-bold text-lg">Question 1 Description</p>
-                                <p className="text-sm">Subject: Math</p>
-                                <p className="text-sm">Date: 2024-02-17</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="bg-gray-100 p-4 rounded-md shadow-md">
-                                <p className="text-sm text-gray-600">ID: 2</p>
-                                <p className="font-bold text-lg">Question 2 Description</p>
-                                <p className="text-sm">Subject: Science</p>
-                                <p className="text-sm">Date: 2024-02-18</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div className="bg-gray-100 p-4 rounded-md shadow-md">
-                                <p className="text-sm text-gray-600">ID: 3</p>
-                                <p className="font-bold text-lg">Question 3 Description</p>
-                                <p className="text-sm">Subject: History</p>
-                                <p className="text-sm">Date: 2024-02-19</p>
-                            </div>
-                        </li>
-                        {/* Add more question cards here */}
-                    </ul>
+                    {posts.map((post) => (
+                        <ul className="questions-list space-y-4" key={post.id}>
+                            <li>
+                                <div className="bg-gray-100 p-4 rounded-md shadow-md">
+                                    <h1>{post.creator}</h1>
+                                    <h2>{post.description}</h2>
+                                    <p>{post.problems}</p>
+                                    {/* <p>{post.responseData}</p> */}
+                                </div>
+                            </li>
+                            {/* Add more question cards here */}
+                        </ul>
+                    ))
+                    }
                 </div>
             </div>
         </div>
