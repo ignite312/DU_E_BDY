@@ -1,0 +1,21 @@
+1. Find all prime p such that 17p + 1 is a prime.
+2. Find all positive integers d such that it divides n + 4 and n + 2014 for some
+positive integer n.
+3. Find all n so that 7n + 1j8n + 55.
+4. Find the maximum positive integer n such that
+n3 + 10
+n + 10
+is an integer.
+5. The diverence of two odd numbers is divisible by 2 but not by 4. Prove that
+their sum is divisible by 4.
+6. Decide if a number ending in some zeros followed by some 2s is a square? In
+explanation, the number is like 22:::2200:::00.
+7. The sum of two positive integers is a prime. Find their greatest common
+divisor.
+8. If n is odd, then prove that, n2 􀀀 1 is divisible by 8.
+9. For all odd n, prove that, n2j13 + 23 + : : : + n3.
+Hint. You know any formula for right side of the divisibility?
+10. Find the maximum value of n so that, n consecutive integers are pairwise
+co-prime.
+11. Every prime greater than 3 can be written as 6k + 1 or 6k 􀀀 1.
+12. Use the previous problem as a lemma to prove that 24jp2 􀀀 1.
