@@ -11,6 +11,7 @@ export default function Home() {
           <li>
             <Link href="/home">
               Home
+              {glob}
             </Link>
           </li>x
         </ul>

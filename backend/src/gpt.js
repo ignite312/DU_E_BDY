@@ -15,9 +15,9 @@ class gpt{
                 Topics: ${topics.join(', ')}
                 put their difficulty to ${difficulty} out of 3
                 Write them in the format:
-                Question {number_of_question}: A ball is thrown at a velocity of 12m/s at an angle of 32 degrees with the horizontal. What are the ball's horizontal and vertical velocities?
+                Question {number_of_question}: A ball is thrown at a velocity of $12m/s$ at an angle of $32^o$ with the horizontal. What are the ball's horizontal and vertical velocities?
                 Strictly: Do not say anything extra
-                Strictly: wrap the equations in dollar signs 
+                Strictly: wrap every equation and math notations in dollar signs as in latex equations
                 `
             }],
             model: "gpt-4-0125-preview",
