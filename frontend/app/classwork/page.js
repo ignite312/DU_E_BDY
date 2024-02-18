@@ -51,7 +51,7 @@ export default function Classwork() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resp = await fetch("http://10.100.161.41:8000/get-posts", {
+                const resp = await fetch("http://192.168.225.64:8000/get-posts", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -96,7 +96,7 @@ export default function Classwork() {
                 console.log("File content:", text); // this is the answer we need to check based on the question
                 const fetchData = async () => {
                     try {
-                        const resp = await fetch("http://10.100.161.41:8000/assessment", {
+                        const resp = await fetch("http://192.168.225.64:8000/assessment", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
@@ -132,7 +132,7 @@ export default function Classwork() {
         else if (linkInput) {
             const fetchData = async () => {
                 try {
-                    const resp = await fetch("http://10.100.161.41:8000/assessment-image", {
+                    const resp = await fetch("http://192.168.225.64:8000/assessment-image", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -196,7 +196,7 @@ export default function Classwork() {
         // console.log("Description:", description);
         try {
             // Send the formData to the server using an HTTP request, for example, using fetch
-            const response = await fetch("http://10.100.161.41:8000/assessment-image", {
+            const response = await fetch("http://192.168.225.64:8000/assessment-image", {
                 method: "POST",
                 body: formData
             });
@@ -225,7 +225,7 @@ export default function Classwork() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const resp = await fetch("http://10.100.161.41:8000/get-posts", {
+                const resp = await fetch("http://192.168.225.64:8000/get-posts", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -268,7 +268,10 @@ export default function Classwork() {
                 </div>
 
             </div>
-
+            <div className="flex flex-1 justify-center items-center flex-col"> {/* Center the content */}
+                <h1 className="title" style={{ fontSize: '2.5rem' }}>All of Past Questions</h1>
+                {/* Render posts */}
+            </div> 
             <div className="flex justify-center flex-1 px-4">
                 <div className="w-full max-w-4xl">
                     <ul className="space-y-8">

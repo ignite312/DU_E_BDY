@@ -1,50 +1,54 @@
-/* styles/Home.module.css */
-
 .container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* 100% viewport height */
-  }
-  
-  .header,
-  .mainContent {
-    width: 100%;
-    text-align: center;
-  }
-  
-  .header {
-    background-color: white; /* Example background color */
-    color: black; /* Example text color */
-    padding: 40px; /* Increase padding for a larger welcome message */
-  }
-  
-  .mainContent {
-    flex: 1; /* Grow to fill available space */
-  }
-  
-  .contentCenter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-  
-  .getStartedButton {
-    padding: 15px 30px;
-    background-color: #4caf50; /* Green button color */
-    color: #ffffff; /* White text color */
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-top: 30px;
-    display: inline-block;
-  }
-  
-  /* Increase the font size of the welcome message */
-  .header h1 {
-    font-size: 2em; /* Adjust the font size as needed */
-    color: black;
-    background-color: white;
-  }
-  
+  background-color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Quicksand";
+}
+
+.mainContent {
+  text-align: center;
+  color: black;
+  font-family: "Quicksand";
+}
+
+.heading {
+  font-size: 2.0rem;
+}
+
+.subHeading {
+  font-size: 0.7rem;
+  margin-bottom: 1.5rem;
+  margin-left: 350px;
+}
+
+.description {
+  font-size: 1.0rem;
+  margin-bottom: 2rem;
+}
+
+.getStartedButton {
+  color: black;
+  padding: 0.8rem 2rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  border: 1px solid #0053ba; /* Adding border */
+  transition: background-color 0.3s ease;
+}
+
+
+.getStartedButton:hover {
+  color: white;
+  background-color: #0053ba;
+
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  margin-bottom: 20px; /* Optional: Adjust margin as needed */
+}

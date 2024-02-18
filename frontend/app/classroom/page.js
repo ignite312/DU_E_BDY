@@ -9,14 +9,16 @@ export default function ClassRoom() {
                 <div>
                     <Link href="/classroom/uploadMaterials">
                         <div className="btn btn-outline text-black">
-                        <CiCirclePlus style={{ fontSize: '2em' }} />
+                            <CiCirclePlus style={{ fontSize: '2em' }} />
                             Upload Materials
                         </div>
                     </Link>
                 </div>
             </div>
-
-            <div className="flex justify-center flex-1">
+            <div className="flex justify-center items-center flex-col"> {/* Center the content */}
+                <h1 className="title" style={{ fontSize: '2.5rem' }}>Materials</h1>
+            </div> 
+            <div className="flex justify-center">
                 <div className="w-1/2">
                     <ul className="materials-list space-y-4">
                         <li>
