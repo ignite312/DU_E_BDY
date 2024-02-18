@@ -2,12 +2,15 @@
 import React, { useState } from "react";
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
-import { useEffect, useRef } from 'react';  
+import { useEffect, useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+<<<<<<< Updated upstream
 import Link from 'next/link';
 import { CiCirclePlus } from "react-icons/ci";
 import { useRouter } from 'next/router';
+=======
+>>>>>>> Stashed changes
 
 
 
@@ -21,6 +24,7 @@ export default function Classwork() {
     const [responsePreview, setResponsePreview] = useState(null);
     const [isFinalPreview, setIsFinalPreview] = useState(false);
     const [editableQuestions, setEditableQuestions] = useState([]);
+<<<<<<< Updated upstream
     const [isUploading, setIsUploading] = useState(false);
     const [file, setFile] = useState(null);
     // const router = useRouter();
@@ -30,6 +34,8 @@ export default function Classwork() {
         setFile(event.target.files[0]);
 
     };
+=======
+>>>>>>> Stashed changes
 
     useEffect(() => {
         if (responsePreview) {
@@ -81,85 +87,34 @@ export default function Classwork() {
             difficultyLevel
         };
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const text = e.target.result;
-                // Log the text content of the file
-                // console.log("File content:", text);
-                console.log(typeof (text));
-                const func = async () => {
-                    try {
-                        setSubmitting(true);
-                        const response = await fetch("http://10.100.161.41:8000/create-questions-using-pdf", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                totalQuestions: formData.totalQuestions,
-                                subjectName: formData.subjectName,
-                                selectedTopics: formData.selectedTopics,
-                                difficultyLevel: formData.difficultyLevel,
-                                text: text
-                            })
-                        });
+        try {
+            setSubmitting(true);
+            const response = await fetch("http://10.100.161.41:8000/create-question", {
+                method: "POST",
+                headers:  {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
 
-                        if (response.ok) {
-                            const responseData = await response.json();
-                            console.log("Form submitted successfully!");
-                            console.log("Response Data:", responseData);
-                            setResponsePreview(responseData.results); // Set the response data for preview
-                            setResponseError(null); // Reset any previous error
-                        } else {
-                            const errorMessage = await response.text();
-                            console.error("Failed to submit form data:", errorMessage);
-                            setResponseError(errorMessage);
-                            setResponsePreview(null); // Clear any previous preview data
-                        }
-                    } catch (error) {
-                        console.error("Error submitting form data:", error);
-                        setResponseError("An error occurred while processing your request.");
-                        setResponsePreview(null);
-                    } finally {
-                        setSubmitting(false);
-                    }
-                }
-                func();
-            };
-            reader.readAsText(file); // Read the file as text
-        }
-        else {
-            try {
-                setSubmitting(true);
-                const response = await fetch("http://10.100.161.41:8000/create-question", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (response.ok) {
-                    const responseData = await response.json();
-                    console.log("Form submitted successfully!");
-                    console.log("Response Data:", responseData);
-                    setResponsePreview(responseData.results); // Set the response data for preview
-                    setResponseError(null); // Reset any previous error
-                } else {
-                    const errorMessage = await response.text();
-                    console.error("Failed to submit form data:", errorMessage);
-                    setResponseError(errorMessage);
-                    setResponsePreview(null); // Clear any previous preview data
-                }
-            } catch (error) {
-                console.error("Error submitting form data:", error);
-                setResponseError("An error occurred while processing your request.");
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log("Form submitted successfully!");
+                console.log("Response Data:", responseData);
+                setResponsePreview(responseData.results); // Set the response data for preview
+                setResponseError(null); // Reset any previous error
+            } else {
+                const errorMessage = await response.text();
+                console.error("Failed to submit form data:", errorMessage);
+                setResponseError(errorMessage);
                 setResponsePreview(null); // Clear any previous preview data
-            } finally {
-                setSubmitting(false);
             }
-
+        } catch (error) {
+            console.error("Error submitting form data:", error);
+            setResponseError("An error occurred while processing your request.");
+            setResponsePreview(null); // Clear any previous preview data
+        } finally {
+            setSubmitting(false);
         }
     };
     const MathPreview = ({ content }) => {
@@ -221,6 +176,7 @@ export default function Classwork() {
     // Dummy function for uploading questions
     const uploadQuestions = () => {
         console.log("Uploading questions...");
+<<<<<<< Updated upstream
         setIsUploading(true); // Indicate the start of the uploading process
         let questionsArray = editableQuestions.map(q => q.editedContent);
     
@@ -243,23 +199,34 @@ export default function Classwork() {
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
+=======
+        // console.log(editableQuestions);
+        const upload = async () => {
+            let array = []
+            for(let i = 0; i < editableQuestions.length; i++){
+                array.push(editableQuestions[i].editedContent);
+>>>>>>> Stashed changes
             }
-            return response.json(); // Process the response data
-        })
-        .then(data => {
-            console.log("Successfully created post:", data);
-            // Handle successful post creation here
-        })
-        .catch(error => {
-            console.error("Failed to create post:", error);
-            // Handle errors here
-        })
-        .finally(() => {
-            setIsUploading(false); // Indicate that uploading has finished regardless of the outcome
-        });
+            const resp = await fetch("http://10.100.161.41:8000/create-new-post", {
+                method: "POST",
+                headers:  {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: "emon",
+                    subjectName: subjectName,
+                    selectedTopics: selectedTopics,
+                    difficultyLevel: difficultyLevel,
+                    description: "",
+                    problems: array
+                })
+            });
+            if(!resp.ok){
+                console.log("Kisui oise na")
+            }
+        }
+        upload();
     };
-    
-    
 
     return (
         <div className="bg-white text-black flex justify-center items-center h-screen">
@@ -320,12 +287,6 @@ export default function Classwork() {
                             <option value="3">3</option>
                         </select>
                     </div>
-                    <div className="ml-2">
-                        <div className="mb-4">
-                            <label htmlFor="file" className="block text-sm font-bold mb-2">Upload File (Txt or Image):</label>
-                            <input type="file" id="file" accept=".txt" onChange={handleFileChange} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
-                        </div>
-                    </div>
                     <div className="flex justify-center ">
                         <button type="submit" disabled={submitting} className={`${submitting ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded`}>{submitting ? "Submitting..." : "Submit"}</button>
                     </div>
@@ -371,6 +332,7 @@ export default function Classwork() {
                         <button onClick={generatePDF} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 mr-4">
                             Create PDF
                         </button>
+<<<<<<< Updated upstream
                         <Link href="/classwork">
                         <button
                             onClick={uploadQuestions}
@@ -378,6 +340,10 @@ export default function Classwork() {
                             className={`${isUploading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded mt-4 mr-4`}
                         >
                             {isUploading ? "Creating Post..." : "Create Post"}
+=======
+                        <button onClick={uploadQuestions} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mr-4">
+                            Upload Questions
+>>>>>>> Stashed changes
                         </button>
                         </Link>
                         <button onClick={toggleFinalPreview} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
