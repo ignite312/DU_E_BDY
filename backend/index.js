@@ -113,31 +113,42 @@ app.post('/assessment', async (req, res) => {
     }
 });
 
-app.post('/assessment-image', upload.single('image') , async (req, res) => {
+app.post('/assessment-image', upload.single('image'), async (req, res) => {
     try {
-        console.log(req.body);
-        const { problemset, url } = req.body;
+        // console.log(req.body, "Aise");
+        // const { problemset, _ } = req.body;
+        const file = req.file;
+        const problemset = req.body.json_data;
 
-        if(!req.url){
+        if (!file) {
             return res.status(400).json({
                 error: "No images"
-            })
+            });
         }
-        const imageBuffer = req.url.buffer;
-        const imageName = `${Date.now()}_${req.file.originalname}`;
-        const imagePath = path.join(__dirname, 'uploads', imageName);
+        console.log('AIse to file');
 
+        const imageBuffer = file.buffer;
+        const imageName = `${Date.now()}_${req.file.originalname}`;
+        const imagePath = path.join(__dirname, 'src', imageName);
+
+        // Writing the image to a file
         await fs.writeFile(imagePath, imageBuffer, (error) => {
-            if(error){
-                console.log('Error writing image: ', err);
-                res.status(500).json({error: "Failed saving file"})
+            if (error) {
+                console.log('Error writing image: ', error);
+                res.status(500).json({ error: "Failed saving file" });
+            }
+            else{
+                console.log('Successfully downloaded image');
             }
         });
 
-        let results;
-        while(!isJsonString(results)) {results = await vision_module.TextFromImage(problemset, imagePath);}
+        // let results;
+        // while (!isJsonString(results)) {
+        const results = await vision_module.TextFromImage(problemset, imagePath);
+        // }
+
         return res.status(200).json({
-            results: JSON.parse(results)
+            results: results
         });
     } catch (err) {
         console.error('Error making assessment: ', err);

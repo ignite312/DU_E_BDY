@@ -5,12 +5,6 @@ import 'katex/dist/katex.min.css';
 import { useEffect, useRef } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-<<<<<<< Updated upstream
-import Link from 'next/link';
-import { CiCirclePlus } from "react-icons/ci";
-import { useRouter } from 'next/router';
-=======
->>>>>>> Stashed changes
 
 
 
@@ -24,18 +18,6 @@ export default function Classwork() {
     const [responsePreview, setResponsePreview] = useState(null);
     const [isFinalPreview, setIsFinalPreview] = useState(false);
     const [editableQuestions, setEditableQuestions] = useState([]);
-<<<<<<< Updated upstream
-    const [isUploading, setIsUploading] = useState(false);
-    const [file, setFile] = useState(null);
-    // const router = useRouter();
-
-    const [description, setDescription] = useState("");
-    const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
-
-    };
-=======
->>>>>>> Stashed changes
 
     useEffect(() => {
         if (responsePreview) {
@@ -176,36 +158,11 @@ export default function Classwork() {
     // Dummy function for uploading questions
     const uploadQuestions = () => {
         console.log("Uploading questions...");
-<<<<<<< Updated upstream
-        setIsUploading(true); // Indicate the start of the uploading process
-        let questionsArray = editableQuestions.map(q => q.editedContent);
-    
-        const postData = {
-            username: "Emon",
-            subjectName,
-            selectedTopics,
-            difficultyLevel,
-            description: "", // Adjust according to your needs
-            problems: questionsArray
-        };
-    
-        fetch("http://10.100.161.41:8000/create-new-post", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(postData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-=======
         // console.log(editableQuestions);
         const upload = async () => {
             let array = []
             for(let i = 0; i < editableQuestions.length; i++){
                 array.push(editableQuestions[i].editedContent);
->>>>>>> Stashed changes
             }
             const resp = await fetch("http://10.100.161.41:8000/create-new-post", {
                 method: "POST",
@@ -332,20 +289,9 @@ export default function Classwork() {
                         <button onClick={generatePDF} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 mr-4">
                             Create PDF
                         </button>
-<<<<<<< Updated upstream
-                        <Link href="/classwork">
-                        <button
-                            onClick={uploadQuestions}
-                            disabled={isUploading}
-                            className={`${isUploading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-4 rounded mt-4 mr-4`}
-                        >
-                            {isUploading ? "Creating Post..." : "Create Post"}
-=======
                         <button onClick={uploadQuestions} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mr-4">
                             Upload Questions
->>>>>>> Stashed changes
                         </button>
-                        </Link>
                         <button onClick={toggleFinalPreview} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
                             Back to Edit
                         </button>
