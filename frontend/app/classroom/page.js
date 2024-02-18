@@ -22,21 +22,21 @@ export default function ClassRoom() {
                         <li>
                             <div className="bg-gray-100 p-4 rounded-md shadow-md">
                                 <p className="text-sm text-gray-600">ID: 1</p>
-                                <p className="font-bold text-lg">Material 1 Description</p>
+                                <p className="font-bold text-lg">Question Bank for Physics</p>
                                 <p className="text-sm">Type: PDF</p>
                             </div>
                         </li>
                         <li>
                             <div className="bg-gray-100 p-4 rounded-md shadow-md">
                                 <p className="text-sm text-gray-600">ID: 2</p>
-                                <p className="font-bold text-lg">Material 2 Description</p>
+                                <p className="font-bold text-lg">Math Solution</p>
                                 <p className="text-sm">Type: Image</p>
                             </div>
                         </li>
                         <li>
                             <div className="bg-gray-100 p-4 rounded-md shadow-md">
                                 <p className="text-sm text-gray-600">ID: 3</p>
-                                <p className="font-bold text-lg">Material 3 Description</p>
+                                <p className="font-bold text-lg">Physics Text Book</p>
                                 <p className="text-sm">Type: PDF</p>
                             </div>
                         </li>

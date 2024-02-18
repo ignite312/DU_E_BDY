@@ -41,8 +41,9 @@ const MathPreview = ({ content }) => {
 export default function Classwork() {
     const [posts, setposts] = useState([]);
     const [totalmarks, settotalmarks] = useState({});
-
     const [file, setFile] = useState(null);
+    const [image, setimage] = useState(null);
+    const [linkInput, setLinkInput] = useState(null); // Added state for link input
     const [description, setDescription] = useState("");
     const [myStr, setmyStr] = useState("");
     const [assessment, setassessment] = useState("");
@@ -76,7 +77,10 @@ export default function Classwork() {
         }
     };
     const handleFileChange = (event, problemset) => {
+        console.log(event);
         setFile(event.target.files[0]); // Set the selected file
+        // setFile(event.target.file[1]);
+        console.log(file);
         setmyStr(problemset);
     };
 
@@ -124,6 +128,39 @@ export default function Classwork() {
 
             };
             reader.readAsText(file); // Read the file as text
+        }
+        else if(linkInput){
+            const fetchData = async () => {
+                try {
+                    const resp = await fetch("http://10.100.161.41:8000/assessment-image", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            problemset: myStr,
+                            url: linkInput
+                        })
+                    });
+                    const responseData = await resp.json();
+                    console.log(responseData);
+                    let tmarks = totalmarks;
+                    const arr = JSON.parse(myStr);
+                    let ttal = arr.length * 10;
+                    tmarks = {
+                        obtained: responseData.results,
+                        total: ttal
+                    };
+                    settotalmarks(tmarks);
+                    setassessment(responseData);
+                    console.log(totalmarks);
+
+                    alert(tmarks.obtained + ' / ' + tmarks.total);
+                } catch (err) {
+                    console.error('Error getting posts: ', err);
+                }
+            }
+            fetchData();
         }
         // Log the description for completeness
         // console.log("Description:", description);
@@ -192,8 +229,12 @@ export default function Classwork() {
                                 <h1 className="text-sm text-gray-600 mt-4">Date Created: {new Date(post.posttime).toLocaleString()}</h1>
                                 <form onSubmit={handleSubmit}>
                                     <div className="mt-4">
-                                        <label htmlFor={`file-${index}`} className="block text-sm font-bold mb-1">Upload File (TXT):</label>
+                                        <label htmlFor={`file-${index}`} className="block text-sm font-bold mb-1">Upload Txt (.txt):</label>
                                         <input type="file" id={`file-${index}`} accept=".txt" onChange={(event) => handleFileChange(event, post.problems)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
+                                    </div>
+                                    <div className="mt-4">
+                                        <label htmlFor={`file-${index}`} className="block text-sm font-bold mb-1">Upload Image(.jpg/.jpeg):</label>
+                                        <input type="file" id={`file-${index}`} accept=".png" onChange={(event) => handleFileChange(event, post.problems)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
                                     </div>
                                     <button type="submit" className="mt-4 btn btn-neutral text-white font-bold py-2 px-4 rounded">Check Script</button>
                                 </form>
@@ -205,3 +246,4 @@ export default function Classwork() {
         </div>
     );
 }    
+

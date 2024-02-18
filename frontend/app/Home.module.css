@@ -1,0 +1,50 @@
+/* styles/Home.module.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* 100% viewport height */
+  }
+  
+  .header,
+  .mainContent {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .header {
+    background-color: white; /* Example background color */
+    color: black; /* Example text color */
+    padding: 40px; /* Increase padding for a larger welcome message */
+  }
+  
+  .mainContent {
+    flex: 1; /* Grow to fill available space */
+  }
+  
+  .contentCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .getStartedButton {
+    padding: 15px 30px;
+    background-color: #4caf50; /* Green button color */
+    color: #ffffff; /* White text color */
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 30px;
+    display: inline-block;
+  }
+  
+  /* Increase the font size of the welcome message */
+  .header h1 {
+    font-size: 2em; /* Adjust the font size as needed */
+    color: black;
+    background-color: white;
+  }
+  

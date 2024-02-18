@@ -7,6 +7,8 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import Link from 'next/link';
 import { CiCirclePlus } from "react-icons/ci";
+import { useRouter } from 'next/router';
+
 
 
 export default function Classwork() {
@@ -21,6 +23,8 @@ export default function Classwork() {
     const [editableQuestions, setEditableQuestions] = useState([]);
     const [isUploading, setIsUploading] = useState(false);
     const [file, setFile] = useState(null);
+    // const router = useRouter();
+
     const [description, setDescription] = useState("");
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -218,7 +222,6 @@ export default function Classwork() {
     const uploadQuestions = () => {
         console.log("Uploading questions...");
         setIsUploading(true); // Indicate the start of the uploading process
-    
         let questionsArray = editableQuestions.map(q => q.editedContent);
     
         const postData = {
@@ -368,6 +371,7 @@ export default function Classwork() {
                         <button onClick={generatePDF} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 mr-4">
                             Create PDF
                         </button>
+                        <Link href="/classwork">
                         <button
                             onClick={uploadQuestions}
                             disabled={isUploading}
@@ -375,6 +379,7 @@ export default function Classwork() {
                         >
                             {isUploading ? "Creating Post..." : "Create Post"}
                         </button>
+                        </Link>
                         <button onClick={toggleFinalPreview} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
                             Back to Edit
                         </button>

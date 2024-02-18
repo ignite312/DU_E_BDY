@@ -12,22 +12,20 @@ const LoginNav = () => {
                         <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                             <li>
                                 <Link href="/app/classroom">
-                                    Classroom
+                                Materials
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/app/classwork">
-                                    Classwork
+                                Problem Set
                                 </Link>
                             </li>
                         </ul>
                     </div>
                     <Link href="/" className="btn btn-ghost text-xl">
-                        <FaChalkboardTeacher className='mt-1'></FaChalkboardTeacher>
-                        Tutor
+                        Tutoring-Assistant
                     </Link>
                 </div>
-                {/* Move the navbar-center content to navbar-end for alignment to the right */}
                 <div className="navbar-end">
                     <ul className="menu menu-horizontal px-1">
                         <li>
