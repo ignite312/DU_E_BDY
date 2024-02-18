@@ -129,7 +129,7 @@ export default function Classwork() {
             };
             reader.readAsText(file); // Read the file as text
         }
-        else if(linkInput){
+        else if (linkInput) {
             const fetchData = async () => {
                 try {
                     const resp = await fetch("http://10.100.161.41:8000/assessment-image", {
@@ -164,6 +164,60 @@ export default function Classwork() {
         }
         // Log the description for completeness
         // console.log("Description:", description);
+    };
+
+    const handleImageChange = (event, problemset) => {
+        // setimage(event.target.file);
+        setmyStr(problemset);
+        const file = event.target.files[0]; // Check if files array is defined
+
+        if (file) {
+            // Proceed with handling the file
+            // ...
+            console.log("file got it");
+            setimage(file);
+        } else {
+            console.error('No file selected');
+        }
+    }
+
+
+
+    const handleImageSubmit = async (event) => {
+        event.preventDefault();
+        if (!image) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', image);
+        formData.append('json_data', JSON.stringify({ problemset: myStr }));
+        // Log the description for completeness
+        // console.log("Description:", description);
+        try {
+            // Send the formData to the server using an HTTP request, for example, using fetch
+            const response = await fetch("http://10.100.161.41:8000/assessment-image", {
+                method: "POST",
+                body: formData
+            });
+
+            const responseData = await resp.json();
+            console.log(responseData);
+            let tmarks = totalmarks;
+            const arr = JSON.parse(myStr);
+            let ttal = arr.length * 10;
+            tmarks = {
+                obtained: responseData.results,
+                total: ttal
+            };
+            settotalmarks(tmarks);
+            setassessment(responseData);
+            console.log(totalmarks);
+
+            alert(tmarks.obtained + ' / ' + tmarks.total);
+        } catch (err) {
+            console.error('Error getting posts: ', err);
+        }
     };
 
 
@@ -232,12 +286,19 @@ export default function Classwork() {
                                         <label htmlFor={`file-${index}`} className="block text-sm font-bold mb-1">Upload Txt (.txt):</label>
                                         <input type="file" id={`file-${index}`} accept=".txt" onChange={(event) => handleFileChange(event, post.problems)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
                                     </div>
-                                    <div className="mt-4">
-                                        <label htmlFor={`file-${index}`} className="block text-sm font-bold mb-1">Upload Image(.jpg/.jpeg):</label>
-                                        <input type="file" id={`file-${index}`} accept=".png" onChange={(event) => handleFileChange(event, post.problems)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
-                                    </div>
                                     <button type="submit" className="mt-4 btn btn-neutral text-white font-bold py-2 px-4 rounded">Check Script</button>
                                 </form>
+
+                                <div className="divider">OR</div>
+
+                                <form onSubmit={handleImageSubmit}>
+                                    <div className="mt-4">
+                                        <label htmlFor={`file-${index}`} className="block text-sm font-bold mb-1">Upload Image(.png):</label>
+                                        <input type="file" id={`file-${index}`} accept=".png" onChange={(event) => handleImageChange(event, post.problems)} className="w-full border border-gray-300 rounded px-3 py-2 bg-white" />
+                                    </div>
+                                    <button type="submit" className="mt-4 btn btn-primary  text-white font-bold py-2 px-4 rounded">Upload your solution</button>
+                                </form>
+
                             </li>
                         ))}
                     </ul>
@@ -245,5 +306,5 @@ export default function Classwork() {
             </div>
         </div>
     );
-}    
+}
 
