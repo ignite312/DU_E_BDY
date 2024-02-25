@@ -35,6 +35,10 @@ The most unique feature of this platform is the assistance of an AI to build up 
 [![Screenshot 2024-02-18 at 8.27.16 AM](https://github.com/ignite312/Tutoring-assistant_Sust-Hackathon/raw/main/ui/Screenshot%202024-02-18%20at%208.27.16%20AM.png)](https://github.com/ignite312/Tutoring-assistant_Sust-Hackathon/blob/main/ui/Screenshot%202024-02-18%20at%208.27.16%20AM.png)
 
 
+
+## Video Demonstration
+- [Youtube](https://www.youtube.com/watch?v=LusxJqNHKNA)
+
 ## Team Member Information
 **DU_E_BDY**</br>
 Member 1: **Sarwar Jahan Rafin** </br>
